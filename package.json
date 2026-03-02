@@ -1,0 +1,57 @@
+{
+  "name": "sound-effect",
+  "displayName": "Sound Effect",
+  "description": "Plays sound effects for VS Code and Antigravity events.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "antigravity.playSound",
+        "title": "Antigravity: Play Sound"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.35",
+    "@types/vscode": "^1.109.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "eslint": "^8.41.0",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "vscode": "^1.1.37"
+  },
+  "dependencies": {
+    "sound-play": "^1.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yahya-nasser-eddine-daraane/sound_effect.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yahya-nasser-eddine-daraane/sound_effect/issues"
+  },
+  "homepage": "https://github.com/yahya-nasser-eddine-daraane/sound_effect#readme"
+}
