@@ -54,21 +54,33 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('moroccan.activatePlayer', () => {
         vscode.commands.executeCommand('moroccan-sound-player.focus');
     }));
-    // Try to auto-activate the player view after a short delay
-    setTimeout(() => {
-        vscode.commands.executeCommand('moroccan-sound-player.focus').then(() => {
-            console.log('Moroccan Sound Engine initialization triggered.');
-        });
-    }, 2000);
+    // Attempt to auto-focus the player view so the user sees the "Unlock" button
+    const triggerFocus = () => {
+        if (!soundProvider.isReady()) {
+            vscode.commands.executeCommand('moroccan-sound-player.focus').then(() => {
+                console.log('Moroccan Sound Engine focus requested.');
+            });
+        }
+    };
+    // Trigger shortly after startup
+    setTimeout(triggerFocus, 2000);
     const playSound = (soundFileName) => {
         const config = vscode.workspace.getConfiguration('moroccan');
         if (!config.get('enabled', true)) {
             return;
         }
         if (!soundProvider.isReady()) {
-            console.log('Sound Engine not ready, attempting to re-initialize...');
+            console.log('Sound Engine not ready, attempting to focus view...');
             vscode.commands.executeCommand('moroccan-sound-player.focus');
-            setTimeout(() => soundProvider.playSound(soundFileName), 1000);
+            // Wait slightly for the view to initialize
+            setTimeout(() => {
+                if (soundProvider.isReady()) {
+                    soundProvider.playSound(soundFileName);
+                }
+                else {
+                    vscode.window.showWarningMessage('Please open the "Moroccan Sound Engine" view in the explorer to enable sounds.');
+                }
+            }, 1000);
         }
         else {
             soundProvider.playSound(soundFileName);
@@ -78,15 +90,14 @@ function activate(context) {
     const terminalListener = vscode.window.onDidEndTerminalShellExecution ? vscode.window.onDidEndTerminalShellExecution((event) => __awaiter(this, void 0, void 0, function* () {
         const exitCode = event.exitCode;
         const config = vscode.workspace.getConfiguration('moroccan');
+        console.log(`Terminal execution ended with code: ${exitCode}`);
         if (exitCode === 0) {
             if (config.get('playOnSuccess', true)) {
-                console.log('Command succeeded. Playing success sound...');
                 playSound('rahaa.mp3');
             }
         }
         else if (exitCode !== undefined) {
             if (config.get('playOnFailure', true)) {
-                console.log(`Command failed with exit code ${exitCode}. Playing failure sound...`);
                 playSound('failure.mp3');
             }
         }
@@ -120,14 +131,13 @@ class SoundPlayerProvider {
                     break;
             }
         });
-        console.log('Webview view resolved.');
+        console.log('Moroccan Webview view resolved.');
     }
     isReady() {
         return !!this._view;
     }
     playSound(soundFileName) {
         if (this._view) {
-            // Use path.join and vscode.Uri.file for cross-platform compatibility
             const soundFileOnDisk = vscode.Uri.file(path.join(this._extensionUri.fsPath, 'assets', soundFileName));
             const soundUri = this._view.webview.asWebviewUri(soundFileOnDisk).toString();
             this._view.webview.postMessage({ command: 'play', uri: soundUri });
@@ -144,11 +154,22 @@ class SoundPlayerProvider {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sound Player</title>
     <style>
-        body { padding: 10px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; text-align: center; }
-        .container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin-top: -20px; }
-        .icon { font-size: 40px; margin-bottom: 10px; }
-        .title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
-        .description { font-size: 12px; color: var(--vscode-descriptionForeground); margin-bottom: 20px; }
+        body { 
+            padding: 10px; 
+            font-family: var(--vscode-font-family);
+            color: var(--vscode-foreground);
+            text-align: center; 
+        }
+        .container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 80vh; 
+        }
+        .icon { font-size: 48px; margin-bottom: 12px; }
+        .title { font-size: 14px; font-weight: bold; margin-bottom: 8px; }
+        .description { font-size: 12px; margin-bottom: 20px; opacity: 0.8; }
         button { 
             background: var(--vscode-button-background); 
             color: var(--vscode-button-foreground); 
@@ -156,18 +177,17 @@ class SoundPlayerProvider {
             padding: 8px 16px; 
             cursor: pointer; 
             border-radius: 2px;
-            font-size: 13px;
             font-weight: 500;
         }
         button:hover { background: var(--vscode-button-hoverBackground); }
-        .status { color: var(--vscode-descriptionForeground); font-size: 11px; margin-top: 10px; }
+        .status { margin-top: 12px; font-size: 11px; opacity: 0.6; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="icon">🔊</div>
         <div class="title">Moroccan Sound Engine</div>
-        <div class="description">Enable audio playback for terminal events.</div>
+        <div class="description">Required to play sounds in this session.</div>
         <button id="activate-btn">Click to Enable Audio</button>
         <div id="status" class="status">Waiting for interaction...</div>
     </div>
@@ -179,7 +199,6 @@ class SoundPlayerProvider {
         const status = document.getElementById('status');
 
         btn.addEventListener('click', () => {
-            // Unlocks audio context
             audio.play().then(() => {
                 audio.pause();
                 audio.currentTime = 0;

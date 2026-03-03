@@ -3,6 +3,7 @@
   "displayName": "Moroccan Sound Effect",
   "description": "Plays Moroccan sound effects for VS Code and terminal events.",
   "version": "0.0.1",
+  "publisher": "yahya-nasser-eddine-daraane",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -10,7 +11,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onView:moroccan-sound-player"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -70,8 +72,7 @@
     "@typescript-eslint/parser": "^5.59.8",
     "eslint": "^8.41.0",
     "ts-loader": "^9.5.4",
-    "typescript": "^5.9.3",
-    "vscode": "^1.1.37"
+    "typescript": "^5.9.3"
   },
   "repository": {
     "type": "git",
@@ -80,9 +81,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/yahya-nasser-eddine-daraane/moroccan_sound_effect/issues"
-  },
-  "homepage": "https://github.com/yahya-nasser-eddine-daraane/moroccan_sound_effect#readme"
+  "type": "commonjs"
 }
