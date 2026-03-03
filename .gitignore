@@ -1,1 +1,21 @@
-/node_modules
+# Dependencies
+node_modules/
+
+# Compilation output
+dist/
+out/
+
+# VS Code
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+*.vsix
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+Thumbs.db

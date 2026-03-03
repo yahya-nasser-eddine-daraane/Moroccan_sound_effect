@@ -18,8 +18,42 @@
       {
         "command": "moroccan.playSound",
         "title": "Moroccan: Play Sound"
+      },
+      {
+        "command": "moroccan.activatePlayer",
+        "title": "Activate Moroccan Sound Engine"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "moroccan-sound-player",
+          "name": "Moroccan Sound Engine",
+          "icon": "$(unmute)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Moroccan Sound",
+      "properties": {
+        "moroccan.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Moroccan sound effects."
+        },
+        "moroccan.playOnSuccess": {
+          "type": "boolean",
+          "default": true,
+          "description": "Play sound on successful terminal command execution."
+        },
+        "moroccan.playOnFailure": {
+          "type": "boolean",
+          "default": true,
+          "description": "Play sound on failed terminal command execution."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -38,9 +72,6 @@
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
     "vscode": "^1.1.37"
-  },
-  "dependencies": {
-    "sound-play": "^1.1.0"
   },
   "repository": {
     "type": "git",
