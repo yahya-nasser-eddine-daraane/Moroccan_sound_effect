@@ -3,6 +3,8 @@
   "displayName": "Moroccan Sound Effect",
   "description": "Plays Moroccan sound effects for VS Code and terminal events.",
   "version": "0.0.1",
+  "icon": "assets/icon.png",
+  "publisher": "yahya-nasser-eddine-daraane",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -10,16 +12,55 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onView:moroccan-sound-player"
   ],
+  "galleryBanner": {
+    "color": "#06402B",
+    "theme": "dark"
+  },
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "moroccan.playSound",
         "title": "Moroccan: Play Sound"
+      },
+      {
+        "command": "moroccan.activatePlayer",
+        "title": "Activate Moroccan Sound Engine"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "moroccan-sound-player",
+          "name": "Moroccan Sound Engine",
+          "icon": "$(unmute)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Moroccan Sound",
+      "properties": {
+        "moroccan.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Moroccan sound effects."
+        },
+        "moroccan.playOnSuccess": {
+          "type": "boolean",
+          "default": true,
+          "description": "Play sound on successful terminal command execution."
+        },
+        "moroccan.playOnFailure": {
+          "type": "boolean",
+          "default": true,
+          "description": "Play sound on failed terminal command execution."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -36,8 +77,7 @@
     "@typescript-eslint/parser": "^5.59.8",
     "eslint": "^8.41.0",
     "ts-loader": "^9.5.4",
-    "typescript": "^5.9.3",
-    "vscode": "^1.1.37"
+    "typescript": "^5.9.3"
   },
   "repository": {
     "type": "git",
@@ -46,9 +86,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/yahya-nasser-eddine-daraane/moroccan_sound_effect/issues"
-  },
-  "homepage": "https://github.com/yahya-nasser-eddine-daraane/moroccan_sound_effect#readme"
+  "type": "commonjs"
 }
