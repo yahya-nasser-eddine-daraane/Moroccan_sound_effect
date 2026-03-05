@@ -6,7 +6,7 @@
   "icon": "assets/icon.png",
   "publisher": "yahya-nasser-eddine-daraane",
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.109.0"
   },
   "categories": [
     "Other"
@@ -85,6 +85,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs"
 }
